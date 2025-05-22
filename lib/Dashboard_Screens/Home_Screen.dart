@@ -311,5 +311,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
- // project in progress...............
- // Project My name is Adeel............/
