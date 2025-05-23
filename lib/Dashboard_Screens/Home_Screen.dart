@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shopify/Athentication_module/Login.dart';
 
 import '../Global_List.dart';
 import 'Add_Product.dart';
+import 'Cart_Products.dart';
 import 'Detail_Product_Screen.dart';
+import 'Favourite_Screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -53,23 +56,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 ListTile(
                   leading: Icon(Icons.home),
                   title: Text("Home"),
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                  },
                 ),
              ListTile(
                leading: Icon(Icons.favorite),
                title: Text("Favourites"),
-               onTap: (){},
+               onTap: (){
+               Navigator.push(context, MaterialPageRoute(builder: (context)=>FavouriteScreen()));
+               },
              ),
              ListTile(
                leading: Icon(Icons.shopping_cart),
                title: Text("Cart"),
-               onTap: (){},
+               onTap: (){
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>CartProducts()));
+               },
              ),
              Divider(),
              ListTile(
                leading: Icon(Icons.logout),
                title: Text("Logout"),
-               onTap: (){},
+               onTap: (){
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));},
              ),
            ],
          ),
