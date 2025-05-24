@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-
-
 import '../Global_List.dart';
 import '../Product_model.dart';
 import 'Home_Screen.dart';

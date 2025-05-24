@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shopify/Dashboard_Screens/Detail_Product_Screen.dart';
 import 'package:shopify/Global_List.dart';
@@ -87,6 +86,75 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                       ),
                             ),
                             SizedBox(height: 8),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product.name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(height: 5),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Rs. ${product.price}",
+                                        style: TextStyle(
+                                          color: Colors.deepPurple,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      if (product.discountPrice != null) ...[
+                                        SizedBox(width: 6),
+                                        Text(
+                                          "Rs. ${product.discountPrice}",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 12,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    "Category: ${product.category}",
+                                    style: TextStyle(fontSize: 12),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    "Stock: ${product.stock} Units",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color:
+                                          product.isAvailable
+                                              ? Colors.green
+                                              : Colors.red,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Status: ${product.isAvailable ? 'In Stock' : 'Out of Stock'}",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color:
+                                          product.isAvailable
+                                              ? Colors.green
+                                              : Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
