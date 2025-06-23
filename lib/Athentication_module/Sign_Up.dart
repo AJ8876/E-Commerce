@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopify/Dashboard_Screens/Home_Screen.dart';
 
 import '../Dashboard_Screens/Add_Product.dart';
 import 'Login.dart';
@@ -161,7 +162,7 @@ class _SignUpState extends State<SignUp> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> AddProduct()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shopify/Athentication_module/Login.dart';
+import 'package:shopify/BottomBar_Screen/Profile_Screen.dart';
 
 import '../Global_List.dart';
 import 'Add_Product.dart';
@@ -318,6 +319,65 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
+                 floatingActionButton: FloatingActionButton(
+                     onPressed: (){
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>AddProduct()));
+                       Fluttertoast.showToast(
+                         msg:
+                         "Add Button Typed",
+                         toastLength: Toast.LENGTH_SHORT,
+                         gravity: ToastGravity.BOTTOM,
+                         backgroundColor: Colors.blue,
+                         textColor: Colors.white,
+                         fontSize: 15.0,
+                       );
+                 },
+                     backgroundColor: Colors.deepPurple,
+                     child: Icon(Icons.add,color: Colors.white),
+                 ),
+                    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                    bottomNavigationBar: BottomAppBar(
+                      shape: CircularNotchedRectangle(),
+                      notchMargin: 8.0,
+                      color: Colors.white,
+                      elevation: 10,
+                      child: Padding(padding: EdgeInsets.symmetric(horizontal: 25.0,vertical: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: (){},
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.home,color: Colors.deepPurple,
+                                  ),
+                                     SizedBox(height: 4),
+                                  Text("Home",style: TextStyle(color: Colors.deepPurple,fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                               GestureDetector(
+                                 onTap: (){
+                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
+                                 },
+                                 child: Column(
+                                   mainAxisSize: MainAxisSize.min,
+                                   children: [
+                                     Icon(Icons.person,color: Colors.deepPurple,
+                                     ),
+                                       SizedBox(height: 4),
+                                       Text("Profile",style: TextStyle(color: Colors.deepPurple,fontSize: 12),
+                                       ),
+                                   ],
+                                 ),
+                                 ),
+                          ],
+                        ),
+                      ),
+                    ),
     );
   }
 }
+
