@@ -58,6 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               child: TextField(
+                controller: FirstNameController,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.person, color: Colors.blue),
                   hintText: "First Name",
@@ -82,6 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               child: TextField(
+                controller: LastNameController,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.person_outline, color: Colors.blue),
                   hintText: "Last Name",
@@ -101,6 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               child: TextField(
+                controller: EmailController,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.email, color: Colors.blue),
                   hintText: "Email",
@@ -120,6 +123,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               child: TextField(
+                controller: PasswordController,
+                obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   suffixIcon: IconButton(onPressed: (){
                     setState(() {
