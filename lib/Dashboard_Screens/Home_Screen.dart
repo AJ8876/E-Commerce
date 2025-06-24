@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shopify/Athentication_module/Login.dart';
 import 'package:shopify/BottomBar_Screen/Profile_Screen.dart';
+import 'package:shopify/Dashboard_Screens/Order_Detail.dart';
 
 import '../Global_List.dart';
 import 'Add_Product.dart';
@@ -73,6 +74,13 @@ class _HomeScreenState extends State<HomeScreen> {
                title: Text("Cart"),
                onTap: (){
                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CartProducts()));
+               },
+             ),
+             ListTile(
+               leading: Icon(Icons.details),
+               title: Text("Order Details"),
+               onTap: (){
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetail()));
                },
              ),
              Divider(),
@@ -322,15 +330,15 @@ class _HomeScreenState extends State<HomeScreen> {
                  floatingActionButton: FloatingActionButton(
                      onPressed: (){
                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddProduct()));
-                       Fluttertoast.showToast(
-                         msg:
-                         "Add Button Typed",
-                         toastLength: Toast.LENGTH_SHORT,
-                         gravity: ToastGravity.BOTTOM,
-                         backgroundColor: Colors.blue,
-                         textColor: Colors.white,
-                         fontSize: 15.0,
-                       );
+                       // Fluttertoast.showToast(
+                       //   msg:
+                       //   "Add Button Typed",
+                       //   toastLength: Toast.LENGTH_SHORT,
+                       //   gravity: ToastGravity.BOTTOM,
+                       //   backgroundColor: Colors.blue,
+                       //   textColor: Colors.white,
+                       //   fontSize: 15.0,
+                       // );
                  },
                      backgroundColor: Colors.deepPurple,
                      child: Icon(Icons.add,color: Colors.white),
