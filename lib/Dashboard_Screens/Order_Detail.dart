@@ -13,10 +13,11 @@ class _OrderDetailState extends State<OrderDetail> {
     return Scaffold(
       backgroundColor: Colors.white70,
       appBar: AppBar(
-        title: Text("Order Detail", style: TextStyle(color: Colors.black)),
+        title: Text("Order Detail", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.deepPurple,
         centerTitle: true,
         elevation: 2,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -93,6 +94,7 @@ class _OrderDetailState extends State<OrderDetail> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
+            //Product 1
             Container(
               margin: EdgeInsets.only(bottom: 12),
               padding: EdgeInsets.all(12),
@@ -134,10 +136,100 @@ class _OrderDetailState extends State<OrderDetail> {
                       ],
                     ),
                   ),
-                  Text("27000", style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    "Rs. 27000",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
+            // Product 2
+            Container(
+              margin: EdgeInsets.only(bottom: 12),
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    height: 65,
+                    width: 65,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("asset/Bag.png"),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Leather BackPack",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          "Quantity : 2",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    "Rs. 20000",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Delivery Address",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                "M Adeel\nHome town Streat 3 Ryk",
+                style: TextStyle(fontSize: 15, height: 1.5),
+              ),
+            ),
+            SizedBox(height: 20),
+            // Payment Method
+            Text(
+              "Payment Method",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+                child: Row(
+                  children: [
+                    Icon(Icons.account_balance_rounded,color: Colors.deepPurple,
+
+                    ),
+                  ],
+                ),
+            )
           ],
         ),
       ),
