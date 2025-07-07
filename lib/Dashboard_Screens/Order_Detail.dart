@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Payment_Screen.dart';
+
 class OrderDetail extends StatefulWidget {
   const OrderDetail({super.key});
 
@@ -307,6 +309,34 @@ class _OrderDetailState extends State<OrderDetail> {
               ),
             ),
             SizedBox(height: 30),
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Order Placed Successfully"),
+                    ),
+                  );
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentScreen()));
+                },
+                label: Text("Order Confirm ", style: TextStyle(color: Colors.white)),
+                icon: Icon(
+                  Icons.replay_circle_filled_outlined,
+                  color: Colors.white,
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  textStyle: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+                SizedBox(height: 30),
           ],
         ),
       ),
