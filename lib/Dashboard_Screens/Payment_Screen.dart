@@ -225,52 +225,87 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
               ),
             ),
-               // Order Summery
-            Text("Order Summery",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+            // Order Summery
+            Text(
+              "Order Summery",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-               SizedBox(height: 10),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 16,vertical: 14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                   child: Column(
-                     children: [
-                       SizedBox(height: 6),
-                       Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                           Text("Items Total",style: TextStyle(fontSize: 14),
-                           ),
-                              Text("Rs. 20000",style: TextStyle(fontSize: 14),
-                              ),
-                         ],
-                       ),
-                          SizedBox(height: 6),
-                         Row(
-                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                           children: [
-                             Text("Shipping",style: TextStyle(fontSize: 14),
-                             ),
-                              Text("Rs. 400",style: TextStyle(fontSize: 14),
-                              ),
-                           ],
-                         ),
-                       Divider(),
-                       Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                           Text("Total",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
-                           ),
-                           Text("Rs.12500",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.deepPurple),
-                           ),
-                         ],
-                       )
-                     ],
-                   ),
+            SizedBox(height: 10),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
               ),
-                SizedBox(height: 30),
+              child: Column(
+                children: [
+                  SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Items Total", style: TextStyle(fontSize: 14)),
+                      Text("Rs. 20000", style: TextStyle(fontSize: 14)),
+                    ],
+                  ),
+                  SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Shipping", style: TextStyle(fontSize: 14)),
+                      Text("Rs. 400", style: TextStyle(fontSize: 14)),
+                    ],
+                  ),
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Total",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "Rs.12500",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepPurple,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 30),
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Order Placed Successfully")),
+                  );
+                },
+                label: Text(
+                  "Place Order",
+                  style: TextStyle(color: Colors.white),
+                ),
+                icon: Icon(Icons.payment, color: Colors.white),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
           ],
         ),
       ),
