@@ -65,6 +65,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            //
                             ClipRRect(
                               borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(12),
@@ -125,13 +126,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                       ],
                                     ],
                                   ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "Category: ${product.category}",
-                                    style: TextStyle(fontSize: 12),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+
                                   Text(
                                     "Stock: ${product.stock} Units",
                                     style: TextStyle(

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "918878073427",
+    "project_id": "shopify-31cb7",
+    "storage_bucket": "shopify-31cb7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:918878073427:android:1d50f368763bcb4fa04ca6",
+        "android_client_info": {
+          "package_name": "com.example.shopify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4bChrEwalRY9KmDzZw2zMxUtLBrx7taI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

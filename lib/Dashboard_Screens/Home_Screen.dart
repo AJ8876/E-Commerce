@@ -355,30 +355,36 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             GestureDetector(
                               onTap: (){},
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.home,color: Colors.deepPurple,
-                                  ),
-                                     SizedBox(height: 4),
-                                  Text("Home",style: TextStyle(color: Colors.deepPurple,fontSize: 12),
-                                  ),
-                                ],
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.home,color: Colors.deepPurple,
+                                    ),
+                                       SizedBox(height: 4),
+                                    Text("Home",style: TextStyle(color: Colors.deepPurple,fontSize: 12),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                                GestureDetector(
                                  onTap: (){
                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
                                  },
-                                 child: Column(
-                                   mainAxisSize: MainAxisSize.min,
-                                   children: [
-                                     Icon(Icons.person,color: Colors.deepPurple,
-                                     ),
-                                       SizedBox(height: 4),
-                                       Text("Profile",style: TextStyle(color: Colors.deepPurple,fontSize: 12),
+                                 child: SingleChildScrollView(
+                                   scrollDirection: Axis.vertical,
+                                   child: Column(
+                                     mainAxisSize: MainAxisSize.min,
+                                     children: [
+                                       Icon(Icons.person,color: Colors.deepPurple,
                                        ),
-                                   ],
+                                         SizedBox(height: 4),
+                                         Text("Profile",style: TextStyle(color: Colors.deepPurple,fontSize: 12),
+                                         ),
+                                     ],
+                                   ),
                                  ),
                                  ),
                           ],
