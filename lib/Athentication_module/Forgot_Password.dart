@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -8,18 +9,36 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  final _formkey = GlobalKey<FormState>();
-  final TextEditingController EmailController = TextEditingController();
-  void resetpassword() {
-    if (_formkey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Password reset Link Send to your Email"),
-          backgroundColor: Colors.blue,
-        ),
-      );
+  final _formkey=GlobalKey<FormState>();
+
+  TextEditingController EmailController=TextEditingController();
+
+  Future <void> resetPassword()async{
+    if(_formkey.currentState !.validate()){
+      try{
+            await FirebaseAuth.instance.sendPasswordResetEmail(email: EmailController.text.trim());
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Password reset Link Send to your Email"),
+                  backgroundColor: Colors.blue,
+                ));
+      }
+      on FirebaseAuthException catch(e){
+        String message = " ";
+        if(e.code=="User-not-found"){
+          message = "No user found for that email";
+        }
+          else{
+            message = "Error : ${e.message}";
+        }
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message),
+            backgroundColor: Colors.red,
+          ));
+      }
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +98,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   height: 50,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: resetpassword,
+                    onPressed: resetPassword,
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         shape: RoundedRectangleBorder(

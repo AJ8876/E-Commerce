@@ -102,6 +102,19 @@ class _LoginState extends State<Login> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Email is Required";
+                        }
+                        else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                            .hasMatch(value)) {
+                          return "Enter a Valid Email Address";
+                        }
+                        else if (!value.contains("@")) {
+                          return "Enter a Valid Email";
+                        }
+                        return null;
+                      },
                   ),
                   SizedBox(height: 15),
                   TextFormField(
@@ -123,6 +136,18 @@ class _LoginState extends State<Login> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
+                      validator: (value){
+                        if(value ==null || value.isEmpty){
+                          return"Password is Required";
+                        }
+                        else if(!value.contains(RegExp(r'[A-Z]'))){
+                          return "Password must Contain At Least 1 Capital Letter";
+                        }
+                        else if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+                          return "Password must contain at least one special character";
+                        }
+                        return null;
+                      }
                   ),
                   SizedBox(height: 10),
                   Row(
