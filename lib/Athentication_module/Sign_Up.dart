@@ -58,7 +58,12 @@ class _SignUpState extends State<SignUp> {
           });
          if(! mounted) return;
            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Account Created Successfully")));
-           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(userId: FirebaseAuth.instance.currentUser!.uid),
+          ),
+        );
     }else{
         throw Exception("User Creation Failed");
       }

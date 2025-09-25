@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import '../Global_List.dart';
 import '../Product_model.dart';
 import 'Home_Screen.dart';
 
@@ -14,6 +16,9 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
+
+
+
   final _formkey = GlobalKey<FormState>();
   bool _isavailable = true;
   String _productcondition = "New";
@@ -67,6 +72,15 @@ class _AddProductState extends State<AddProduct> {
       });
     }
   }
+    Future <List<String>> uploadImagestoFireStore()async{
+    List <String> base64Images=[];
+    for(File image in selectedimages){
+      List<int> imageBytes= await image.readAsBytes();
+      String base64Image= base64Encode(imageBytes);
+      base64Images.add(base64Image);
+    }
+      return base64Images;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,12 +110,7 @@ class _AddProductState extends State<AddProduct> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                validator: (value){
-                  if(value==null || value.trim().isEmpty){
-                    return "This Field is Required";
-                  }
-                    return null;
-                },
+                   validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
               ),
               SizedBox(height: 15),
               TextFormField(
@@ -113,12 +122,7 @@ class _AddProductState extends State<AddProduct> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                validator: (value){
-                  if (value==null || value.trim().isEmpty){
-                    return "This Field is Required";
-                  }
-                  return null;
-                },
+                  validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
               ),
               SizedBox(height: 15),
               TextFormField(
@@ -130,12 +134,7 @@ class _AddProductState extends State<AddProduct> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                validator: (value){
-                  if (value==null || value.trim().isEmpty){
-                    return "This Field is Required";
-                  }
-                  return null;
-                },
+                 validator:  (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
               ),
               SizedBox(height: 15),
               TextFormField(
@@ -147,12 +146,7 @@ class _AddProductState extends State<AddProduct> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                validator: (value){
-                  if (value==null || value.trim().isEmpty){
-                    return "This Field is Required";
-                  }
-                  return null;
-                },
+                   validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
               ),
               SizedBox(height: 15),
               TextFormField(
@@ -164,12 +158,7 @@ class _AddProductState extends State<AddProduct> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                validator: (value){
-                  if (value==null || value.trim().isEmpty){
-                    return "This Field is Required";
-                  }
-                  return null;
-                },
+                validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
               ),
               SizedBox(height: 15),
               DropdownButtonFormField<String>(
@@ -179,12 +168,7 @@ class _AddProductState extends State<AddProduct> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
-                    validator:  (value){
-                    if (value==null || value.trim().isEmpty){
-                      return "Please Select a Category";
-                    }
-                    return null;
-                    },
+                  validator: (value)=> value == null || value.trim().isEmpty? "Please Select a Category": null,
                   value: _selectedCategory,
                   onChanged: (String? NewValue) {
                     setState(() {
@@ -207,12 +191,7 @@ class _AddProductState extends State<AddProduct> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                validator: (value){
-                  if (value==null || value.trim().isEmpty){
-                    return "Please Select a Category";
-                  }
-                  return null;
-                },
+                validator: (value)=> value == null || value.trim().isEmpty? "Please Select a Sub Category": null,
                 value: _selectedSubCategory,
                 onChanged: (String? NewValue) {
                   setState(() {
@@ -236,12 +215,7 @@ class _AddProductState extends State<AddProduct> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                validator: (value){
-                  if (value==null || value.trim().isEmpty){
-                    return "This Field is Required";
-                  }
-                  return null;
-                },
+                validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
               ),
               SizedBox(height: 15),
               TextFormField(
@@ -253,12 +227,7 @@ class _AddProductState extends State<AddProduct> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                validator: (value){
-                  if (value==null || value.trim().isEmpty){
-                    return "This Field is Required";
-                  }
-                    return null;
-                },
+                validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
               ),
               SizedBox(height: 15),
               SwitchListTile(
@@ -388,37 +357,58 @@ class _AddProductState extends State<AddProduct> {
                 height: 50,
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: ()async {
+                  onPressed: () async {
+
                     if (_formkey.currentState!.validate()) {
-                      AllProducts.add(
-                        Product(
-                          name: ProductNameController.text,
-                          description: ProductDescriptionController.text,
-                          price: int.parse(PriceController.text),
-                          sku: int.parse(StockQuantityController.text),
-                          discountPrice: DiscountPriceController.text.isNotEmpty?
-                          int.parse(DiscountPriceController.text) : null,
-                          category: _selectedCategory!,
-                          subCategory: _selectedSubCategory!,
-                          stock: int.parse(StockQuantityController.text),
-                          weight: ShippingWeightController.text,
-                          isAvailable: _isavailable,
-                          isFeatured: isfeatured,
-                          condition: _productcondition,
-                          images: selectedimages,
-                        ),
+
+
+                      List<String> imageBase64 = await uploadImagestoFireStore();
+
+                      // Create Product instance
+                      final product = Product(
+                        id: "", // Firestore khud generate karega
+                        name: ProductNameController.text.trim(),
+                        description: ProductDescriptionController.text.trim(),
+                        price: double.parse(PriceController.text.trim()),
+                        discountPrice: DiscountPriceController.text.isNotEmpty
+                            ? double.parse(DiscountPriceController.text.trim())
+                            : null,
+                        sku: double.parse(StockKeepingUnitController.text.trim()),
+                        category: _selectedCategory!,
+                        subCategory: _selectedSubCategory!,
+                        stock: int.parse(StockQuantityController.text.trim()),
+                        weight: double.parse(ShippingWeightController.text.trim()),
+                        condition: _productcondition,
+                        isAvailable: _isavailable,
+                        isFeatured: isfeatured,
+                        images: imageBase64,
                       );
+
+                      await FirebaseFirestore.instance
+                          .collection("Products")
+                          .add({
+                        ...product.toMap(),
+                        'createdAt': FieldValue.serverTimestamp(), // ✅ Added timestamp
+                      });
+
                       Fluttertoast.showToast(
-                        msg: "Your Product is added Successfully",
+                        msg: "Product Added Successfully",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
                         backgroundColor: Colors.blue,
                         textColor: Colors.white,
-                        fontSize: 15.0,
                       );
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => HomeScreen()));
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(userId: FirebaseAuth.instance.currentUser!.uid),
+                        ),
+                      );
+
+
                     }
+
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,

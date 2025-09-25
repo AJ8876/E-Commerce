@@ -37,7 +37,12 @@ class _LoginState extends State<Login> {
             await _auth.signInWithEmailAndPassword(
                 email: EmailController.text.trim(), password: PasswordController.text.trim());
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Login Successfully")));
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AddProduct()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(userId: FirebaseAuth.instance.currentUser!.uid),
+              ),
+            );
 
         }on FirebaseAuthException catch(e){
           String message="";
