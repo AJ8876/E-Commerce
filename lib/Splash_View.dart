@@ -31,17 +31,17 @@ class _SplashViewState extends State<SplashView> {
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-            Image.asset("asset/applogo.png",height: 200,width: 200),
+            Image.asset("asset/png.jd.png",height: 200,width: 200),
             SizedBox(height: 25),
             Text(
               "E Commerce",
               style: TextStyle(
-                  color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold),
+                  color: Colors.purple, fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 40),
             if(isLoading)
             CircularProgressIndicator(
-             valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+             valueColor: AlwaysStoppedAnimation<Color>(Colors.purple),
             ),
                   ],
                 ),

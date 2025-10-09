@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shopify/Dashboard_Screens/Detail_Product_Screen.dart';
+import 'package:shopify/Dashboard_Screens/Order_Detail.dart';
 import 'package:shopify/Product_model.dart';
 import 'package:shopify/Services/Carts_Services.dart';
 
@@ -23,7 +24,7 @@ class _CartProductsState extends State<CartProducts> {
       appBar: AppBar(
         centerTitle: true,
         title: Text("My Cart"),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
       ),
       body: StreamBuilder<List<Product>>(
@@ -90,7 +91,7 @@ class _CartProductsState extends State<CartProducts> {
                       Text(
                         "Rs. ${product.price}",
                         style: TextStyle(
-                          color: Colors.deepPurple,
+                          color: Colors.purple,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -138,6 +139,15 @@ class _CartProductsState extends State<CartProducts> {
           );
         },
       ),
+        floatingActionButton: FloatingActionButton.extended(
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetail(UserId: widget.userId,)));
+            },
+          label: Text("Processed to Checkout",style: TextStyle(color: Colors.white),
+          ),
+          icon: Icon(Icons.arrow_forward,color: Colors.white),
+          backgroundColor: Colors.purple,
+        ),
     );
   }
 }

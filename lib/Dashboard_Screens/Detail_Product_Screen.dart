@@ -55,7 +55,7 @@ class DetailProductScreen extends StatelessWidget {
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.white),
           title: Text(product.name,style: TextStyle(color: Colors.white),),
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.purple,
           elevation: 4,
         ),
         body: SingleChildScrollView(

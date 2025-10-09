@@ -20,7 +20,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text("Password reset Link Send to your Email"),
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.purple,
                 ));
       }
       on FirebaseAuthException catch(e){
@@ -49,7 +49,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           style: TextStyle(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -100,7 +100,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   child: ElevatedButton(
                     onPressed: resetPassword,
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Colors.purple,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     child: Text(
@@ -116,7 +116,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   },
                   child: Text(
                     "Back to Login",
-                    style: TextStyle(color: Colors.blue, fontSize: 16),
+                    style: TextStyle(color: Colors.purple, fontSize: 16),
                   ),
                 ),
               ],

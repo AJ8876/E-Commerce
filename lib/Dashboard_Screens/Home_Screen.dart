@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple,
         elevation: 4,
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage('asset/Adeel.jpg'),
               ),
-              decoration: BoxDecoration(color: Colors.deepPurple),
+              decoration: BoxDecoration(color: Colors.purple),
             ),
             ListTile(
               leading: Icon(Icons.home),
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Text("Order Details"),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => OrderDetail()));
+                    MaterialPageRoute(builder: (context) => OrderDetail(UserId: widget.userId)));
               },
             ),
             Divider(),
@@ -219,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       });
                                       Fluttertoast.showToast(
                                         msg: "Product removed from Favourites",
-                                        backgroundColor: Colors.blue,
+                                        backgroundColor: Colors.purple,
                                         textColor: Colors.white,
                                       );
                                     } else {
@@ -232,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       });
                                       Fluttertoast.showToast(
                                         msg: "Your Product is added to Favourites",
-                                        backgroundColor: Colors.blue,
+                                        backgroundColor: Colors.purple,
                                         textColor: Colors.white,
                                       );
                                     }
@@ -264,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     );
                                     Fluttertoast.showToast(
                                       msg: "Your Product is removed from Cart",
-                                      backgroundColor: Colors.blue,
+                                      backgroundColor: Colors.purple,
                                       textColor: Colors.white,
                                     );
 
@@ -277,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     );
                                     Fluttertoast.showToast(
                                       msg: "Your Product is added to Cart",
-                                      backgroundColor: Colors.blue,
+                                      backgroundColor: Colors.purple,
                                       textColor: Colors.white,
                                     );
                                     // Remove from Firestore
@@ -289,7 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ? Icons.shopping_cart
                                       : Icons.shopping_cart_outlined,
                                   color: cartlist.contains(product)
-                                      ? Colors.deepPurple
+                                      ? Colors.purple
                                       : Colors.grey,
                                 ),
                               )
@@ -319,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Text(
                                         "Rs. ${product.price}",
                                         style: const TextStyle(
-                                          color: Colors.deepPurple,
+                                          color: Colors.purple,
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -377,7 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => AddProduct()));
         },
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.purple,
         child: Icon(Icons.add, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -400,10 +400,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.home, color: Colors.deepPurple),
+                      Icon(Icons.home, color: Colors.purple),
                       SizedBox(height: 4),
                       Text("Home",
-                          style: TextStyle(color: Colors.deepPurple, fontSize: 12)),
+                          style: TextStyle(color: Colors.purple, fontSize: 12)),
                     ],
                   ),
                 ),
@@ -418,10 +418,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.person, color: Colors.deepPurple),
+                      Icon(Icons.person, color: Colors.purple),
                       SizedBox(height: 4),
                       Text("Profile",
-                          style: TextStyle(color: Colors.deepPurple, fontSize: 12)),
+                          style: TextStyle(color: Colors.purple, fontSize: 12)),
                     ],
                   ),
                 ),

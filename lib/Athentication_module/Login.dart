@@ -68,7 +68,7 @@ class _LoginState extends State<Login> {
                 color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -179,7 +179,7 @@ class _LoginState extends State<Login> {
                           },
                           child: Text(
                             "Forgot Password ?",
-                            style: TextStyle(color: Colors.blue),
+                            style: TextStyle(color: Colors.purple),
                           ),
                         ),
                       ),
@@ -192,7 +192,7 @@ class _LoginState extends State<Login> {
                     child: ElevatedButton(
                       onPressed: isLoading ? null :  LoginUser,
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Colors.purple,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10))),
 
@@ -216,7 +216,7 @@ class _LoginState extends State<Login> {
                           },
                           child: Text(
                             "Signup",
-                            style: TextStyle(color: Colors.blue),
+                            style: TextStyle(color: Colors.purple),
                           ),
                         ),
                       ),

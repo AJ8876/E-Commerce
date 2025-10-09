@@ -94,7 +94,7 @@ class _SignUpState extends State<SignUp> {
           style: TextStyle(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -278,7 +278,7 @@ class _SignUpState extends State<SignUp> {
 
 
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
+                            backgroundColor: Colors.purple,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)
                             )
@@ -304,7 +304,7 @@ class _SignUpState extends State<SignUp> {
                             },
                             child: Text(
                               "Login",
-                              style: TextStyle(color: Colors.blue),
+                              style: TextStyle(color: Colors.purple),
                             ),
                           ),
                         ),

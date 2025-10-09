@@ -91,7 +91,7 @@ class _AddProductState extends State<AddProduct> {
           style: TextStyle(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -146,6 +146,26 @@ class _AddProductState extends State<AddProduct> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
+                   onChanged: (value){
+                    final priceText=PriceController.text.trim();
+                    final discountText=value.trim();
+                    if(priceText.isNotEmpty && discountText.isNotEmpty){
+                      final price=double.tryParse(priceText) ?? 0;
+                      final discount=double.tryParse(discountText) ?? 0;
+
+                      if(discount>price){
+                       Fluttertoast.showToast(msg: "Discount Price Should Less than Original Price",
+                           toastLength: Toast.LENGTH_SHORT,
+                         gravity: ToastGravity.BOTTOM,
+                         backgroundColor: Colors.redAccent,
+                         textColor: Colors.white,
+                         fontSize: 16.0,
+                       );
+                           DiscountPriceController.clear();
+                      }
+
+                    }
+                   },
                    validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
               ),
               SizedBox(height: 15),
@@ -281,7 +301,7 @@ class _AddProductState extends State<AddProduct> {
                   color:
                       isfeatured ? Colors.blue.shade50 : Colors.grey.shade200,
                   border: Border.all(
-                    color: isfeatured ? Colors.blue : Colors.grey,
+                    color: isfeatured ? Colors.purple : Colors.grey,
                     width: 2,
                   ),
                 ),
@@ -395,7 +415,7 @@ class _AddProductState extends State<AddProduct> {
                         msg: "Product Added Successfully",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Colors.purple,
                         textColor: Colors.white,
                       );
 
@@ -411,7 +431,7 @@ class _AddProductState extends State<AddProduct> {
 
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Colors.purple,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

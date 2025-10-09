@@ -39,4 +39,22 @@ class Carts_Services {
         .doc(productId)
         .delete();
   }
+  Future<void> clearCart(String userId) async {
+    try {
+      // Access the correct path under Users → userId → Cart
+      var snapshot = await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userId)
+          .collection("Cart")
+          .get();
+
+      for (var doc in snapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      print("Cart cleared successfully for user: $userId");
+    } catch (e) {
+      print("Error clearing cart: $e");
+    }
+  }
 }

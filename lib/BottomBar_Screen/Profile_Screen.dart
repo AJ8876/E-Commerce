@@ -20,7 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Profile", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple,
         centerTitle: true,
         leading: BackButton(color: Colors.white),
         elevation: 0,
@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: TextField(
                 controller: FirstNameController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.person, color: Colors.blue),
+                  prefixIcon: Icon(Icons.person, color: Colors.purple),
                   hintText: "First Name",
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(
@@ -86,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: TextField(
                 controller: LastNameController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.person_outline, color: Colors.blue),
+                  prefixIcon: Icon(Icons.person_outline, color: Colors.purple),
                   hintText: "Last Name",
                 ),
               ),
@@ -106,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: TextField(
                 controller: EmailController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.email, color: Colors.blue),
+                  prefixIcon: Icon(Icons.email, color: Colors.purple),
                   hintText: "Email",
                 ),
               ),
@@ -134,7 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                       icon: Icon(_obscurePassword? Icons.visibility_off : Icons.visibility,color: Colors.grey),
                   ),
-                  prefixIcon: Icon(Icons.lock, color: Colors.blue),
+                  prefixIcon: Icon(Icons.lock, color: Colors.purple),
                   hintText: "Password",
                 ),
               ),
@@ -149,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                      label: Text("Save Changes",style: TextStyle(color: Colors.white),
                      ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Colors.purple,
                         padding: EdgeInsets.symmetric(horizontal: 40,vertical: 16),
                         elevation: 4,
                         shape: RoundedRectangleBorder(
