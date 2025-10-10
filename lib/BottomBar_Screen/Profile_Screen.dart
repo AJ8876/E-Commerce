@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final String userId;
+  const ProfileScreen({super.key, required this.userId});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -9,10 +12,85 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _obscurePassword = true;
-  final TextEditingController FirstNameController=TextEditingController(text: "Adeel");
-  final TextEditingController LastNameController=TextEditingController(text: "Ahmed");
-  final TextEditingController EmailController=TextEditingController(text: "adeel588@gmail.com");
-  final TextEditingController PasswordController=TextEditingController(text: "123456");
+  bool _isEditing=false;
+  bool _isLoading=true;
+  final TextEditingController FirstNameController=TextEditingController();
+  final TextEditingController LastNameController=TextEditingController();
+  final TextEditingController EmailController=TextEditingController();
+  final TextEditingController PasswordController=TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _FetchUserData();
+  }
+
+     Future<void> _FetchUserData()async{
+     try {
+       DocumentSnapshot doc = await
+       FirebaseFirestore.instance.collection("Users").doc(widget.userId).get();
+       if (doc.exists) {
+         setState(() {
+           FirstNameController.text = doc['FirstName'] ?? '';
+           LastNameController.text = doc['LastName'] ?? '';
+           EmailController.text = doc['Email'] ?? '';
+           PasswordController.text = doc['Password'] ?? '';
+           _isLoading = false;
+         });
+       }
+       else {
+         setState(() => _isLoading = false);
+         Fluttertoast.showToast(msg: "User not Found",
+           toastLength: Toast.LENGTH_SHORT,
+           gravity: ToastGravity.BOTTOM,
+           backgroundColor: Colors.redAccent,
+           textColor: Colors.white,
+           fontSize: 16.0,
+         );
+       }
+     }catch(e){
+       Fluttertoast.showToast(msg: "Error Loading Data : $e",
+         toastLength: Toast.LENGTH_SHORT,
+         gravity: ToastGravity.BOTTOM,
+         backgroundColor: Colors.redAccent,
+         textColor: Colors.white,
+         fontSize: 16.0,
+       );
+     }
+     }
+
+     Future<void> _UpdateuserProfile()async{
+     try{
+          await FirebaseFirestore.instance.collection("Users").doc(widget.userId)
+              .update({
+                "FirstName" : FirstNameController.text.trim(),
+                "LastName"  : LastNameController.text.trim(),
+                "Email"     : EmailController.text.trim(),
+                "Password"  : PasswordController.text.trim(),
+
+          });
+
+          Fluttertoast.showToast(msg: "Profile Updated Successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.redAccent,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+
+          setState(() => _isEditing=false);
+     } catch(e) {
+       Fluttertoast.showToast(msg: "Error Updating Profile $e",
+         toastLength: Toast.LENGTH_SHORT,
+         gravity: ToastGravity.BOTTOM,
+         backgroundColor: Colors.redAccent,
+         textColor: Colors.white,
+         fontSize: 16.0,
+       );
+     }
+     }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +102,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
         leading: BackButton(color: Colors.white),
         elevation: 0,
+        actions: [
+          IconButton(onPressed: (){
+            setState(() {
+              _isEditing= ! _isEditing;
+            });
+          },
+              icon: Icon(_isEditing? Icons.close:Icons.edit,color: Colors.white),
+          ),
+        ],
       ),
-      body: SingleChildScrollView(
+      body: _isLoading ? Center(
+        child: CircularProgressIndicator(
+          color: Colors.purple,
+        ),
+      ):
+      SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,6 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               child: TextField(
+                enabled: _isEditing,
                 controller: FirstNameController,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.person, color: Colors.purple),
@@ -84,6 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               child: TextField(
+                enabled: _isEditing,
                 controller: LastNameController,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.person_outline, color: Colors.purple),
@@ -104,6 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               child: TextField(
+                enabled: _isEditing,
                 controller: EmailController,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.email, color: Colors.purple),
@@ -124,6 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               child: TextField(
+                enabled: _isEditing,
                 controller: PasswordController,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
@@ -139,13 +235,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
+               if(_isEditing)
                Center(
-                 child: ElevatedButton.icon(onPressed: (){
-                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Profile Updated Successfully"),
-                     backgroundColor: Colors.green,
-                   ),
-                   );
-                 },
+                 child: ElevatedButton.icon(onPressed: _UpdateuserProfile,
                      label: Text("Save Changes",style: TextStyle(color: Colors.white),
                      ),
                       style: ElevatedButton.styleFrom(

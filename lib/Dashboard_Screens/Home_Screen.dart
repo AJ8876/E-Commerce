@@ -411,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
               GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfileScreen()));
+                      MaterialPageRoute(builder: (context) => ProfileScreen(userId: widget.userId)));
                 },
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
