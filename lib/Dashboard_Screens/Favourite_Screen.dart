@@ -23,7 +23,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("My Favourites"),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.purple,
         centerTitle: true,
         foregroundColor: Colors.white,
       ),
@@ -130,7 +130,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                   Text(
                                     "Rs. ${product.price}",
                                     style: TextStyle(
-                                      color: Colors.deepPurple,
+                                      color: Colors.purple,
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),

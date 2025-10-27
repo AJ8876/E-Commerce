@@ -88,7 +88,7 @@ class DetailProductScreen extends StatelessWidget {
                   Text(
                     "Rs ${product.price}",
                     style: TextStyle(
-                        color: Colors.deepPurple,
+                        color: Colors.purple,
                         fontSize: 22,
                         fontWeight: FontWeight.bold),
                   ),
@@ -133,7 +133,7 @@ class DetailProductScreen extends StatelessWidget {
               Text(
                 "Description",
                 style: TextStyle(
-                    color: Colors.deepPurple,
+                    color: Colors.purple,
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
@@ -162,7 +162,7 @@ class DetailProductScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.deepPurple, size: 20),
+          Icon(icon, color: Colors.purple, size: 20),
           SizedBox(width: 8),
           Expanded(
               child: SingleChildScrollView(

@@ -24,6 +24,94 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final Map<String, bool> _isfavourited = {}; // ✅ product.id based
+  bool _isAdmin =false;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfAdmin();
+  }
+    Future<void> _checkIfAdmin()async{
+     final user= FirebaseAuth.instance.currentUser;
+     if(user != null){
+       const AdminEmails=[
+         "muhammad.haad96@gmail.com",
+         "babofunny786@gmail.com",
+       ];
+         setState(() {
+           _isAdmin=AdminEmails.contains(user.email);
+         });
+     }
+    }
+
+  Future<void> _deleteproduct(String productId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Products")
+          .doc(productId)
+          .delete();
+      Fluttertoast.showToast(
+        msg: "Product Deleted Successfully",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Failed to Delete : $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  }
+
+  void _Showdeletedialogue(String productId) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            title: Row(
+              children: [
+                Icon(Icons.warning_amber_rounded, color: Colors.redAccent),
+                SizedBox(width: 8),
+                Text("Delete Product"),
+              ],
+            ),
+            content: Text(
+              "Are you sure you want to delete this product permanently?",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Cancel", style: TextStyle(color: Colors.grey)),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await _deleteproduct(productId);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                ),
+                child: Text("Delete"),
+              ),
+            ],
+          ),
+    );
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +136,6 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 4,
         iconTheme: IconThemeData(color: Colors.white),
       ),
-
       // ✅ Drawer
       drawer: Drawer(
         child: ListView(
@@ -69,7 +156,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(userId: FirebaseAuth.instance.currentUser!.uid),
+                    builder:
+                        (context) => HomeScreen(
+                          userId: FirebaseAuth.instance.currentUser!.uid,
+                        ),
                   ),
                 );
               },
@@ -78,8 +168,10 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: Icon(Icons.favorite),
               title: Text("Favourites"),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FavouriteScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FavouriteScreen()),
+                );
               },
             ),
             ListTile(
@@ -88,17 +180,23 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 final userId = FirebaseAuth.instance.currentUser!.uid;
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CartProducts(userId: userId)));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CartProducts(userId: userId),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: Icon(Icons.details),
               title: Text("Order Details"),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => OrderDetail(UserId: widget.userId)));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderDetail(UserId: widget.userId),
+                  ),
+                );
               },
             ),
             Divider(),
@@ -107,7 +205,9 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Text("Logout"),
               onTap: () {
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => Login()));
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
               },
             ),
           ],
@@ -116,31 +216,34 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // ✅ Product Grid
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection("Products")
-            .orderBy("createdAt", descending: true)
-            .snapshots(),
+        stream:
+            FirebaseFirestore.instance
+                .collection("Products")
+                .orderBy("createdAt", descending: true)
+                .snapshots(),
         builder: (context, snapshot) {
           // print(snapshot.data!.docs.map((e) => e.data()).toList());
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.white,
-              ),
+              child: CircularProgressIndicator(backgroundColor: Colors.white),
             );
           }
           if (snapshot.hasError) {
-            return Center(child: Text("Something went wrong: ${snapshot.error}"));
+            return Center(
+              child: Text("Something went wrong: ${snapshot.error}"),
+            );
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return Center(child: Text("No Products Added Yet"));
           }
 
-          final products = snapshot.data!.docs.map((doc) {
-            return Product.fromMap(doc.data() as Map<String, dynamic>, doc.id);
-          }).toList();
-
-
+          final products =
+              snapshot.data!.docs.map((doc) {
+                return Product.fromMap(
+                  doc.data() as Map<String, dynamic>,
+                  doc.id,
+                );
+              }).toList();
 
           return Padding(
             padding: const EdgeInsets.all(10.0),
@@ -161,7 +264,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => DetailProductScreen(product: product)),
+                        builder: (_) => DetailProductScreen(product: product),
+                      ),
                     );
                   },
                   child: Container(
@@ -180,24 +284,49 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // ✅ Product Image
-                        ClipRRect(
-                          borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(12)),
-                          child: product.images.isNotEmpty
-                              ? Image.memory(
-                            base64Decode(product.images.first),
-                            height: 130,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          )
-                              : Container(
-                            height: 130,
-                            color: Colors.grey[300],
-                            child: const Center(
-                              child: Icon(Icons.image, size: 50),
+                        Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(12),
+                              ),
+                              child:
+                                  product.images.isNotEmpty
+                                      ? Image.memory(
+                                        base64Decode(product.images.first),
+                                        height: 130,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      )
+                                      : Container(
+                                        height: 130,
+                                        color: Colors.grey[300],
+                                        child: const Center(
+                                          child: Icon(Icons.image, size: 50),
+                                        ),
+                                      ),
                             ),
-                          ),
+                              if(_isAdmin)
+                            Positioned(
+                              child: InkWell(
+                                onTap: () => _Showdeletedialogue(product.id),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.redAccent.withOpacity(0.8),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  padding: EdgeInsets.all(5),
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+
                         SizedBox(height: 8),
 
                         // ✅ Fav + Cart Buttons
@@ -207,45 +336,55 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               IconButton(
-                                onPressed: () async{
-                                  final String userId= FirebaseAuth.instance.currentUser!.uid;
-                                    if (isfav) {
-
-                                      await FirebaseFirestore.instance.collection("Users")
-                                          .doc(userId).collection("Favourites").doc(product.id).delete();
-                                      setState(() {
-                                        _isfavourited[product.id] = false;
-                                        favourites.remove(product);
-                                      });
-                                      Fluttertoast.showToast(
-                                        msg: "Product removed from Favourites",
-                                        backgroundColor: Colors.purple,
-                                        textColor: Colors.white,
-                                      );
-                                    } else {
-                                      await FirebaseFirestore.instance.collection("Users")
-                                          .doc(userId).collection("Favourites").doc(product.id)
-                                          .set(product.toMap());
-                                      setState(() {
-                                        _isfavourited[product.id] = true;
-                                        favourites.add(product);
-                                      });
-                                      Fluttertoast.showToast(
-                                        msg: "Your Product is added to Favourites",
-                                        backgroundColor: Colors.purple,
-                                        textColor: Colors.white,
-                                      );
-                                    }
-                                  
+                                onPressed: () async {
+                                  final String userId =
+                                      FirebaseAuth.instance.currentUser!.uid;
+                                  if (isfav) {
+                                    await FirebaseFirestore.instance
+                                        .collection("Users")
+                                        .doc(userId)
+                                        .collection("Favourites")
+                                        .doc(product.id)
+                                        .delete();
+                                    setState(() {
+                                      _isfavourited[product.id] = false;
+                                      favourites.remove(product);
+                                    });
+                                    Fluttertoast.showToast(
+                                      msg: "Product removed from Favourites",
+                                      backgroundColor: Colors.purple,
+                                      textColor: Colors.white,
+                                    );
+                                  } else {
+                                    await FirebaseFirestore.instance
+                                        .collection("Users")
+                                        .doc(userId)
+                                        .collection("Favourites")
+                                        .doc(product.id)
+                                        .set(product.toMap());
+                                    setState(() {
+                                      _isfavourited[product.id] = true;
+                                      favourites.add(product);
+                                    });
+                                    Fluttertoast.showToast(
+                                      msg:
+                                          "Your Product is added to Favourites",
+                                      backgroundColor: Colors.purple,
+                                      textColor: Colors.white,
+                                    );
+                                  }
                                 },
                                 icon: Icon(
-                                  isfav ? Icons.favorite : Icons.favorite_border,
+                                  isfav
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
                                   color: isfav ? Colors.red : Colors.grey,
                                 ),
                               ),
                               IconButton(
                                 onPressed: () async {
-                                  final Carts_Services _carts_services = Carts_Services();
+                                  final Carts_Services _carts_services =
+                                      Carts_Services();
                                   // setState(() {
                                   //   if (cartlist.contains(product)) {
                                   //     cartlist.remove(product);
@@ -267,9 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       backgroundColor: Colors.purple,
                                       textColor: Colors.white,
                                     );
-
-                                  }
-                                  else {
+                                  } else {
                                     //added to firebase
                                     await _carts_services.addToCart(
                                       widget.userId,
@@ -281,18 +418,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                       textColor: Colors.white,
                                     );
                                     // Remove from Firestore
-
                                   }
                                 },
                                 icon: Icon(
                                   cartlist.contains(product)
                                       ? Icons.shopping_cart
                                       : Icons.shopping_cart_outlined,
-                                  color: cartlist.contains(product)
-                                      ? Colors.purple
-                                      : Colors.grey,
+                                  color:
+                                      cartlist.contains(product)
+                                          ? Colors.purple
+                                          : Colors.grey,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -308,7 +445,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     product.name,
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold, fontSize: 16),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -332,7 +471,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             color: Colors.red,
                                             fontSize: 12,
                                             decoration:
-                                            TextDecoration.lineThrough,
+                                                TextDecoration.lineThrough,
                                           ),
                                         ),
                                       ],
@@ -340,10 +479,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
 
                                   const SizedBox(height: 4),
-                                  Text("Category: ${product.category}",
-                                      style: const TextStyle(fontSize: 12)),
-                                  Text("Sub Category: ${product.subCategory}",
-                                      style: TextStyle(fontSize: 12)),
+                                  Text(
+                                    "Category: ${product.category}",
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                  Text(
+                                    "Sub Category: ${product.subCategory}",
+                                    style: TextStyle(fontSize: 12),
+                                  ),
 
                                   Text(
                                     product.isAvailable
@@ -351,9 +494,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         : "Out of Stock",
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: product.isAvailable
-                                          ? Colors.green
-                                          : Colors.red,
+                                      color:
+                                          product.isAvailable
+                                              ? Colors.green
+                                              : Colors.red,
                                     ),
                                   ),
                                 ],
@@ -375,7 +519,9 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AddProduct()));
+            context,
+            MaterialPageRoute(builder: (context) => AddProduct()),
+          );
         },
         backgroundColor: Colors.purple,
         child: Icon(Icons.add, color: Colors.white),
@@ -402,16 +548,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Icon(Icons.home, color: Colors.purple),
                       SizedBox(height: 4),
-                      Text("Home",
-                          style: TextStyle(color: Colors.purple, fontSize: 12)),
+                      Text(
+                        "Home",
+                        style: TextStyle(color: Colors.purple, fontSize: 12),
+                      ),
                     ],
                   ),
                 ),
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfileScreen(userId: widget.userId)));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => ProfileScreen(userId: widget.userId),
+                    ),
+                  );
                 },
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
@@ -420,8 +573,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Icon(Icons.person, color: Colors.purple),
                       SizedBox(height: 4),
-                      Text("Profile",
-                          style: TextStyle(color: Colors.purple, fontSize: 12)),
+                      Text(
+                        "Profile",
+                        style: TextStyle(color: Colors.purple, fontSize: 12),
+                      ),
                     ],
                   ),
                 ),

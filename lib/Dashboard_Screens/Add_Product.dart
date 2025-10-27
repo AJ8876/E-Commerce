@@ -16,9 +16,6 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-
-
-
   final _formkey = GlobalKey<FormState>();
   bool _isavailable = true;
   String _productcondition = "New";
@@ -64,22 +61,73 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController SubCategoryController = TextEditingController();
 
   Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        selectedimages.add(File(pickedFile.path));
-      });
+    final ImagePicker Picker = ImagePicker();
+    final Source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder:
+          (context) => SafeArea(
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.photo_library),
+                  title: Text("Pick Image From Gallery"),
+                  onTap: () => Navigator.pop(context, ImageSource.gallery),
+                ),
+                ListTile(
+                  leading: Icon(Icons.camera_alt),
+                  title: Text("Pick Image From The Camera"),
+                  onTap: () => Navigator.pop(context, ImageSource.camera),
+                ),
+              ],
+            ),
+          ),
+    );
+
+    if (Source == null) return;
+    try {
+      if (Source == ImageSource.gallery) {
+        final List<XFile>? PickedFiles = await Picker.pickMultiImage(
+          imageQuality: 85,
+        );
+        if (PickedFiles != null && PickedFiles.isNotEmpty) {
+          setState(() {
+            selectedimages = [
+              ...selectedimages,
+              ...PickedFiles.map((x) => File(x.path)),
+            ];
+          });
+        }
+      } else if (Source == ImageSource.camera) {
+        final XFile? PickedFile = await Picker.pickImage(
+          source: ImageSource.camera,
+          imageQuality: 85,
+        );
+        if (PickedFile != null) {
+          setState(() {
+            selectedimages.add(File(PickedFile.path));
+          });
+        }
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Error Picking Images : $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     }
   }
-    Future <List<String>> uploadImagestoFireStore()async{
-    List <String> base64Images=[];
-    for(File image in selectedimages){
-      List<int> imageBytes= await image.readAsBytes();
-      String base64Image= base64Encode(imageBytes);
+
+  Future<List<String>> uploadImagestoFireStore() async {
+    List<String> base64Images = [];
+    for (File image in selectedimages) {
+      List<int> imageBytes = await image.readAsBytes();
+      String base64Image = base64Encode(imageBytes);
       base64Images.add(base64Image);
     }
-      return base64Images;
+    return base64Images;
   }
 
   @override
@@ -89,7 +137,10 @@ class _AddProductState extends State<AddProduct> {
         title: Text(
           "Add Product Screen",
           style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Colors.purple,
         centerTitle: true,
@@ -108,9 +159,14 @@ class _AddProductState extends State<AddProduct> {
                   labelText: "Product Name",
                   prefixIcon: Icon(Icons.production_quantity_limits),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                   validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
+                validator:
+                    (value) =>
+                        value == null || value.trim().isEmpty
+                            ? "This Field is Required"
+                            : null,
               ),
               SizedBox(height: 15),
               TextFormField(
@@ -120,144 +176,185 @@ class _AddProductState extends State<AddProduct> {
                   labelText: "Product Description",
                   prefixIcon: Icon(Icons.description),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                  validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
+                validator:
+                    (value) =>
+                        value == null || value.trim().isEmpty
+                            ? "This Field is Required"
+                            : null,
               ),
               SizedBox(height: 15),
               TextFormField(
-                keyboardType:  TextInputType.number,
+                keyboardType: TextInputType.number,
                 controller: PriceController,
                 decoration: InputDecoration(
                   labelText: "Price",
                   prefixIcon: Icon(Icons.attach_money),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                 validator:  (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
+                validator:
+                    (value) =>
+                        value == null || value.trim().isEmpty
+                            ? "This Field is Required"
+                            : null,
               ),
               SizedBox(height: 15),
               TextFormField(
-                keyboardType:  TextInputType.number,
+                keyboardType: TextInputType.number,
                 controller: DiscountPriceController,
                 decoration: InputDecoration(
                   labelText: "Discount Price (Optional)",
                   prefixIcon: Icon(Icons.local_offer),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                   onChanged: (value){
-                    final priceText=PriceController.text.trim();
-                    final discountText=value.trim();
-                    if(priceText.isNotEmpty && discountText.isNotEmpty){
-                      final price=double.tryParse(priceText) ?? 0;
-                      final discount=double.tryParse(discountText) ?? 0;
+                onChanged: (value) {
+                  final priceText = PriceController.text.trim();
+                  final discountText = value.trim();
+                  if (priceText.isNotEmpty && discountText.isNotEmpty) {
+                    final price = double.tryParse(priceText) ?? 0;
+                    final discount = double.tryParse(discountText) ?? 0;
 
-                      if(discount>price){
-                       Fluttertoast.showToast(msg: "Discount Price Should Less than Original Price",
-                           toastLength: Toast.LENGTH_SHORT,
-                         gravity: ToastGravity.BOTTOM,
-                         backgroundColor: Colors.redAccent,
-                         textColor: Colors.white,
-                         fontSize: 16.0,
-                       );
-                           DiscountPriceController.clear();
-                      }
-
+                    if (discount > price) {
+                      Fluttertoast.showToast(
+                        msg: "Discount Price Should Less than Original Price",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.redAccent,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                      DiscountPriceController.clear();
                     }
-                   },
-                   validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
+                  }
+                },
+                validator:
+                    (value) =>
+                        value == null || value.trim().isEmpty
+                            ? "This Field is Required"
+                            : null,
               ),
               SizedBox(height: 15),
               TextFormField(
                 controller: StockKeepingUnitController,
-                keyboardType:  TextInputType.number,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: "SKU (Stock Keeping Unit )",
                   prefixIcon: Icon(Icons.qr_code),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
+                validator:
+                    (value) =>
+                        value == null || value.trim().isEmpty
+                            ? "This Field is Required"
+                            : null,
               ),
               SizedBox(height: 15),
               DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: "Category",
-                    prefixIcon: Icon(Icons.category),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                decoration: InputDecoration(
+                  labelText: "Category",
+                  prefixIcon: Icon(Icons.category),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  validator: (value)=> value == null || value.trim().isEmpty? "Please Select a Category": null,
-                  value: _selectedCategory,
-                  onChanged: (String? NewValue) {
-                    setState(() {
-                      _selectedCategory = NewValue;
-                      _FilterSubCategory = _SubCategories[NewValue] ?? [];
-                      _selectedSubCategory = null;
-                    });
-                  },
-                  items: _Categories.map((Category) {
-                    return DropdownMenuItem<String>(
-                      value: Category,
-                      child: Text(Category),
-                    );
-                  }).toList()),
+                ),
+                validator:
+                    (value) =>
+                        value == null || value.trim().isEmpty
+                            ? "Please Select a Category"
+                            : null,
+                value: _selectedCategory,
+                onChanged: (String? NewValue) {
+                  setState(() {
+                    _selectedCategory = NewValue;
+                    _FilterSubCategory = _SubCategories[NewValue] ?? [];
+                    _selectedSubCategory = null;
+                  });
+                },
+                items:
+                    _Categories.map((Category) {
+                      return DropdownMenuItem<String>(
+                        value: Category,
+                        child: Text(Category),
+                      );
+                    }).toList(),
+              ),
               SizedBox(height: 15),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   labelText: "Sub Category",
                   prefixIcon: Icon(Icons.list),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                validator: (value)=> value == null || value.trim().isEmpty? "Please Select a Sub Category": null,
+                validator:
+                    (value) =>
+                        value == null || value.trim().isEmpty
+                            ? "Please Select a Sub Category"
+                            : null,
                 value: _selectedSubCategory,
                 onChanged: (String? NewValue) {
                   setState(() {
                     _selectedSubCategory = NewValue;
                   });
                 },
-                items: _FilterSubCategory.map((SubCategory) {
-                  return DropdownMenuItem(
-                    child: Text(SubCategory),
-                    value: SubCategory,
-                  );
-                }).toList(),
+                items:
+                    _FilterSubCategory.map((SubCategory) {
+                      return DropdownMenuItem(
+                        child: Text(SubCategory),
+                        value: SubCategory,
+                      );
+                    }).toList(),
               ),
               SizedBox(height: 15),
               TextFormField(
                 controller: StockQuantityController,
-                keyboardType:  TextInputType.number,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: "Stock Quantity",
                   prefixIcon: Icon(Icons.inventory),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
+                validator:
+                    (value) =>
+                        value == null || value.trim().isEmpty
+                            ? "This Field is Required"
+                            : null,
               ),
               SizedBox(height: 15),
               TextFormField(
                 controller: ShippingWeightController,
-                keyboardType:  TextInputType.number,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: "Shipping Weight (Kg)",
                   prefixIcon: Icon(Icons.scale),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                validator: (value)=> value == null || value.trim().isEmpty? "This Field is Required": null,
+                validator:
+                    (value) =>
+                        value == null || value.trim().isEmpty
+                            ? "This Field is Required"
+                            : null,
               ),
               SizedBox(height: 15),
               SwitchListTile(
                 value: _isavailable,
                 onChanged: (value) {
-                  setState(
-                    () {
-                      _isavailable = value;
-                    },
-                  );
+                  setState(() {
+                    _isavailable = value;
+                  });
                 },
                 title: Text("Availability (In Stock)"),
               ),
@@ -265,9 +362,10 @@ class _AddProductState extends State<AddProduct> {
               Text(
                 "Product Condition",
                 style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Row(
                 children: [
@@ -316,7 +414,9 @@ class _AddProductState extends State<AddProduct> {
                           Text(
                             "Feature this Product",
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           Text(
                             isfeatured
@@ -333,8 +433,9 @@ class _AddProductState extends State<AddProduct> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                isfeatured ? Colors.red : Colors.green),
+                          backgroundColor:
+                              isfeatured ? Colors.red : Colors.green,
+                        ),
                         child: Text(
                           isfeatured ? "Remove" : "Mark as a Featured",
                           style: TextStyle(color: Colors.white),
@@ -351,26 +452,62 @@ class _AddProductState extends State<AddProduct> {
                   Text(
                     "Product Images: ",
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   ElevatedButton.icon(
                     onPressed: _pickImage,
                     label: Text("Upload"),
                     icon: Icon(Icons.image),
-                  )
+                  ),
                 ],
               ),
               SizedBox(height: 10),
               selectedimages.isNotEmpty
                   ? Wrap(
-                      spacing: 10,
-                      children: selectedimages.map((image) {
-                        return Image.file(image,
-                            height: 80, width: 80, fit: BoxFit.cover);
-                      }).toList(),
-                    )
+                    spacing: 10,
+                    children:
+                        selectedimages.map((image) {
+                          return Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.file(
+                                  image,
+                                  height: 80,
+                                  width: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                top :0,
+                                right :0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedimages.remove(image);
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black54,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                  )
                   : Center(child: Text("No Images Selected")),
               SizedBox(height: 20),
               SizedBox(
@@ -378,38 +515,44 @@ class _AddProductState extends State<AddProduct> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-
                     if (_formkey.currentState!.validate()) {
-
-
-                      List<String> imageBase64 = await uploadImagestoFireStore();
+                      List<String> imageBase64 =
+                          await uploadImagestoFireStore();
 
                       // Create Product instance
                       final product = Product(
-                        id: "", // Firestore khud generate karega
+                        id: "", //  Firestore khud generate karega
                         name: ProductNameController.text.trim(),
                         description: ProductDescriptionController.text.trim(),
                         price: double.parse(PriceController.text.trim()),
-                        discountPrice: DiscountPriceController.text.isNotEmpty
-                            ? double.parse(DiscountPriceController.text.trim())
-                            : null,
-                        sku: double.parse(StockKeepingUnitController.text.trim()),
+                        discountPrice:
+                            DiscountPriceController.text.isNotEmpty
+                                ? double.parse(
+                                  DiscountPriceController.text.trim(),
+                                )
+                                : null,
+                        sku: double.parse(
+                          StockKeepingUnitController.text.trim(),
+                        ),
                         category: _selectedCategory!,
                         subCategory: _selectedSubCategory!,
                         stock: int.parse(StockQuantityController.text.trim()),
-                        weight: double.parse(ShippingWeightController.text.trim()),
+                        weight: double.parse(
+                          ShippingWeightController.text.trim(),
+                        ),
                         condition: _productcondition,
                         isAvailable: _isavailable,
                         isFeatured: isfeatured,
                         images: imageBase64,
                       );
 
-                      await FirebaseFirestore.instance
-                          .collection("Products")
-                          .add({
-                        ...product.toMap(),
-                        'createdAt': FieldValue.serverTimestamp(), // ✅ Added timestamp
-                      });
+                      await FirebaseFirestore.instance.collection("Products").add(
+                        {
+                          ...product.toMap(),
+                          'createdAt':
+                              FieldValue.serverTimestamp(), // ✅ Added timestamp
+                        },
+                      );
 
                       Fluttertoast.showToast(
                         msg: "Product Added Successfully",
@@ -422,13 +565,13 @@ class _AddProductState extends State<AddProduct> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HomeScreen(userId: FirebaseAuth.instance.currentUser!.uid),
+                          builder:
+                              (context) => HomeScreen(
+                                userId: FirebaseAuth.instance.currentUser!.uid,
+                              ),
                         ),
                       );
-
-
                     }
-
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
