@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'Athentication_module/Login.dart';
 
 class SplashView extends StatefulWidget {
@@ -10,6 +11,14 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+  AppOpenAd? _appOpenAd;
+  bool _isAdLoaded=false;
+  int _countdown=10;
+  Timer? _countdownTimer;
+  bool _navigated=false;
+
+
+
   bool isLoading = true;
   @override
   void initState() {
@@ -23,6 +32,22 @@ class _SplashViewState extends State<SplashView> {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
     });
   }
+
+
+  void _startcountdown(){
+    _countdownTimer= Timer.periodic(Duration(seconds: 1), (timer){
+      if(_countdown > 0){
+        setState(() {
+          _countdown--;
+        });
+      }
+        else {
+             GoToSplashIfNotNavigated();
+      }
+    });
+  }
+
+  void GoToSplashIfNotNavigated(){}
 
   @override
   Widget build(BuildContext context) {
